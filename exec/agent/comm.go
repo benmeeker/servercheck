@@ -8,7 +8,7 @@ import (
 	"servercheck/shared"
 )
 
-var url string = "http://192.168.1.63:8080/upload"
+var url string = "http://localhost:8080/upload"
 
 func Jsoncomm() shared.Info {
 	var info = shared.Info{
