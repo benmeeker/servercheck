@@ -14,8 +14,8 @@ type OPackage struct {
 type Info struct {
 	Kernel   string     `json:"kernel"`
 	OS       OPackage   `json:"os"`
-	Repos    []RPackage `json:"repos"`
 	Hostname string     `json:"hostname"`
+	Aptrepos []RPackage `json:"aptrepos"`
 }
 
 type PageData struct {

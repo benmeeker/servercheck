@@ -1,3 +1,5 @@
 {{define "home"}}
-Hi welcome to the home page
+{{range .PageInfo.penny.Aptinfo.Updates}}
+{{.Name}}
+{{end}}
 {{end}}

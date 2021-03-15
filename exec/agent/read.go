@@ -11,8 +11,6 @@ import (
 	"strings"
 )
 
-var array []string
-
 func Getkernel() string {
 	out, err := exec.Command("uname", "-r").Output()
 	if err != nil {
@@ -37,13 +35,21 @@ func Getos() shared.OPackage {
 	return opackages
 }
 
-func Aptrepos() []shared.RPackage {
+func Gethost() string {
+	host, err := os.Hostname()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return host
+}
+
+func Allaptrepos() []shared.RPackage {
+	var array []string
 	out, err := exec.Command("dpkg", "-l").Output()
 	if err != nil {
 		log.Fatal(err)
 	}
-	transfer := string(out)
-	scanner := bufio.NewScanner(strings.NewReader(transfer))
+	scanner := bufio.NewScanner(strings.NewReader(string(out)))
 	for scanner.Scan() {
 		array = append(array, scanner.Text())
 	}
@@ -63,12 +69,4 @@ func Aptrepos() []shared.RPackage {
 		rpackages = append(rpackages, pkg)
 	}
 	return rpackages
-}
-
-func Gethost() string {
-	host, err := os.Hostname()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return host
 }

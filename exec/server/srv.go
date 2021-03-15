@@ -10,6 +10,7 @@ import (
 	"servercheck/shared"
 )
 
+var infoCached shared.Info
 var pagedata = shared.PageData{
 	PageInfo: make(map[string]shared.Info),
 }
@@ -22,13 +23,13 @@ func Server() {
 
 func Upload(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("connection from %s\n", r.RemoteAddr)
-	var infoCached shared.Info
 	body, _ := ioutil.ReadAll(r.Body)
 	err := json.Unmarshal(body, &infoCached)
 	if err != nil {
 		log.Fatal(err)
 	}
 	pagedata.PageInfo[infoCached.Hostname] = infoCached
+	Aptparse()
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {

@@ -14,8 +14,8 @@ func Jsoncomm() shared.Info {
 	var info = shared.Info{
 		Kernel:   Getkernel(),
 		OS:       Getos(),
-		Repos:    Aptrepos(),
 		Hostname: Gethost(),
+		Aptrepos: Allaptrepos(),
 	}
 
 	buff := new(bytes.Buffer)
