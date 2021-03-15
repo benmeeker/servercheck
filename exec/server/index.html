@@ -12,6 +12,8 @@
             {{template "nav" .}}
             {{- if eq .Path "/"}}
             {{- template "home" .}}
+            {{- else if eq .Path "/allservers"}}
+            {{- template "allservers" .}}
             {{end}}
           </div>
       </body>

@@ -36,6 +36,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	case "/":
 		pagedata.Path = "/"
 		pagedata.Pagename = "Home"
+	case "/allservers":
+		pagedata.Path = "/allservers"
+		pagedata.Pagename = "All Servers"
 	default:
 		http.NotFound(w, r)
 		return
