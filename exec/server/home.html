@@ -1,0 +1,10 @@
+{{define "home"}}
+<p>
+    {{range .PageInfo}}
+    Kernel: {{.Kernel}}
+    OS: {{.OS.Name}}
+    Version: {{.OS.Version}}
+    Repos: {{.Repos}}
+    {{end}}
+</p>
+{{end}}
