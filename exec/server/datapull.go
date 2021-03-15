@@ -3,27 +3,37 @@ package main
 import (
 	"compress/gzip"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"servercheck/shared"
 	"time"
 )
 
-func Datapull(f string, url string) {
+var types = shared.OS{
+	Type: []string{"main", "contrib", "nonfree"},
+}
+
+func Datapull(f string, url string) error {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer resp.Body.Close()
-	gz, _ := gzip.NewReader(resp.Body)
-	os, _ := ioutil.ReadAll(gz)
-	ioutil.WriteFile(f, os, 0666)
+	gz, err := gzip.NewReader(resp.Body)
+	if err != nil {
+		return err
+	}
+	os, err := ioutil.ReadAll(gz)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(f, os, 0666)
 }
 
 func Getdata() {
 	for {
-		Datapull("kalimain.txt", "http://mirrors.jevincanders.net/kali/dists/kali-rolling/main/binary-amd64/Packages.gz")
-		Datapull("kalicontrib.txt", "http://mirrors.jevincanders.net/kali/dists/kali-rolling/contrib/binary-amd64/Packages.gz")
-		Datapull("kalinonfree.txt", "http://mirrors.jevincanders.net/kali/dists/kali-rolling/non-free/binary-amd64/Packages.gz")
+		for _, n := range types.Type {
+			Datapull(types.OS+n+".txt", "http://mirrors.jevincanders.net/kali/dists/kali-rolling/"+n+"/binary-amd64/Packages.gz")
+		}
 		time.Sleep(24 * time.Hour)
 	}
 }

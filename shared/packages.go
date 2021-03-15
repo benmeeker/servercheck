@@ -23,3 +23,12 @@ type PageData struct {
 	Path     string          `json:"path"`
 	Pagename string          `json:"pagename"`
 }
+
+type OS struct {
+	OS   string   `json:"os"`
+	Type []string `json:"type"`
+}
+
+type Newversions struct {
+	Aptversions []OPackage `json:"aptversions"`
+}
