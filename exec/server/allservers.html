@@ -1,5 +1,19 @@
 {{define "allservers"}}
     {{range .PageInfo}}
-    <a class="navbar-brand" href="#">{{.Hostname}}</a>
+        {{if .Outdated}}
+            <div class="card m-3 red" style="width: 10rem;">
+                <div class="card-body">
+                <h5 class="card-title">{{.Hostname}}</h5>
+                <a href="/outdated/{{.Hostname}}" class="btn btn-sm btn-danger shadow">Outdated Packages</a>
+                </div>
+            </div>
+        {{else}}
+            <div class="card m-3 green" style="width: 10rem;">
+                <div class="card-body">
+                <h5 class="card-title">{{.Hostname}}</h5>
+                <a href="/outdated/{{.Hostname}}" class="btn btn-sm btn-success shadow">All Repos</a>
+                </div>
+            </div>
+        {{end}}
     {{end}}
 {{end}}

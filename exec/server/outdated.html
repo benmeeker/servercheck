@@ -1,0 +1,17 @@
+{{- define "outdated"}}
+{{- $key := index .PageInfo .Hostname}}
+<table width = "100%">
+    <tr>
+        <th style = "background-color: #ffffff00;font-size:25px;padding-left: 5px" width = "33%">Name</th>
+        <th style = "background-color: #ffffff00;font-size:25px;padding-left: 5px" width = "33%">Current Version</th>
+        <th style = "background-color: #ffffff00;font-size:25px;padding-left: 5px" width = "33%">Newest Version</th>
+    </tr>
+        {{- range $key.Outdatedrepos}}
+        <tr>
+            <th style = "padding-left: 10px" width = "33%">{{.Name}}</th>
+            <td style = "padding-left: 10px" width = "33%">{{.Oldversion}}</td>
+            <td style = "padding-left: 10px" width = "333%">{{.Newversion}}</td>
+        </tr>   
+    {{- end}}
+</table>
+{{- end}}
