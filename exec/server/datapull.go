@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"compress/gzip"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"servercheck/shared"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -30,21 +30,28 @@ func Datapull(f string, url string) error {
 	}
 	f = strings.ReplaceAll(f, " ", "")
 	f = strings.ReplaceAll(f, "/", "")
-	return ioutil.WriteFile(f, os, 0666)
+	log.Println("Writing file", f)
+	return ioutil.WriteFile("txtfiles/"+f, os, 0666)
 }
 
-func Getdata(os, repo, url string) {
-	err := Datapull(os+repo+".txt", url)
+func Getdata(os, repo, url string, num string) {
+	log.Println("Getting data")
+	err := Datapull(num+os+repo+".txt", url)
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func Read(os string) error {
-	for _, n := range types[os].Type {
+func Read(os string, infoCached shared.Info) ([]string, error) {
+	log.Println("reading files")
+	var arr []string
+	var count int
+	for n := range types[os].Type {
 		var a []string
 		var s string
-		out, err := ioutil.ReadFile(os + n + ".txt")
+		c := strconv.Itoa(count)
+		out, err := ioutil.ReadFile("txtfiles/" + c + os + n + ".txt")
+		log.Println(c + os + n + ".txt")
 		if err != nil {
 			log.Println(err)
 			continue
@@ -60,8 +67,9 @@ func Read(os string) error {
 			}
 			a = append(a, string(scanner.Text()))
 		}
+		count++
 	}
-	return nil
+	return arr, nil
 }
 
 func Outdated(infoCached shared.Info) bool {
@@ -82,11 +90,12 @@ func Links() {
 		for _, pi := range pagedata.PageInfo {
 			pi.OS.Name = strings.ReplaceAll(pi.OS.Name, " ", "")
 			pi.OS.Name = strings.ReplaceAll(pi.OS.Name, "/", "")
-			fmt.Printf("%#v\n", types)
-			for _, n := range types[pi.OS.Name].Type {
-				var u = types[pi.OS.Name].URL + n + "/binary-amd64/Packages.gz"
-				fmt.Println(u)
-				Getdata(pi.OS.Name, n, u)
+			for nu, u := range pi.URL {
+				for i := range types[pi.OS.Name].Type {
+					var ur = u.URL + "/" + "/dists/" + u.Repo + "/" + i + "/binary-amd64/Packages.gz"
+					num := strconv.Itoa(nu)
+					Getdata(pi.OS.Name, i, ur, num)
+				}
 			}
 		}
 		time.Sleep(24 * time.Hour)

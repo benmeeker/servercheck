@@ -1,16 +1,17 @@
 {{define "home"}}
     {{range .PageInfo}}
-    {{- $newversions := .Newversions}}
         {{if .Outdated}}
             <div class="card m-3 red" style="width: 18rem;">
                 <div class="card-body">
-                <h5 class="card-title">{{.Hostname}}</h5>
+                <h5 class="card-title"><strong>{{.Hostname}}</strong>
+                    <span class="badge bg-danger rounded-pill shadow">{{.Totalout}}</span>
+                </h5>
                 <p class="card-text">
-                    OS: {{.OS.Name}}
-                    <br>
-                    Version: {{.OS.Version}}
-                    <br>
-                    Kernel: {{.Kernel}}
+                <strong>OS:</strong> {{.OS.Name}}
+                <br>
+                <strong>Version:</strong> {{.OS.Version}}
+                <br>
+                <strong>Kernel:</strong> {{.Kernel}}
                     <br><br>
                     This server has one or more outdated packages.</p>
                 <a href="/outdated/{{.Hostname}}" class="btn btn-danger shadow">Outdated Packages</a>

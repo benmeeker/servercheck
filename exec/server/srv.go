@@ -33,6 +33,7 @@ func Upload(c *gin.Context) {
 	}
 	infoCached.Newversions = Aptparse(infoCached)
 	infoCached.Outdated = Outdated(infoCached)
+	_, infoCached.Totalout = Outdatedrepos(infoCached.Hostname)
 	pagedata.PageInfo[infoCached.Hostname] = infoCached
 }
 
@@ -50,7 +51,7 @@ func Home(c *gin.Context) {
 		pagedata.Path = "outdated"
 		pagedata.Pagename = pagedata.Hostname
 		pi := pagedata.PageInfo[pagedata.Hostname]
-		pi.Outdatedrepos = Outdatedrepos(pagedata.Hostname)
+		pi.Outdatedrepos, _ = Outdatedrepos(pagedata.Hostname)
 		pagedata.PageInfo[pagedata.Hostname] = pi
 	default:
 		c.AbortWithStatus(http.StatusNotFound)

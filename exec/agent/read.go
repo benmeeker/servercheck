@@ -43,6 +43,58 @@ func Gethost() string {
 	return host
 }
 
+func Getrepos(os string) []shared.RPackage {
+	var reps []shared.RPackage
+	switch os {
+	case "Kali GNU/Linux", "Ubuntu", "Pop!_OS":
+		reps = Allaptrepos()
+	}
+	return reps
+}
+
+func Geturl(os string) ([]shared.UPackage, error) {
+	var url []shared.UPackage
+	var err error
+	switch os {
+	case "Kali GNU/Linux", "Ubuntu", "Pop!_OS":
+		url = Apturl()
+		log.Println(err)
+	}
+	err = nil
+	return url, err
+}
+
+func Apturl() []shared.UPackage {
+	var contents []string
+	var pack []shared.UPackage
+	src, err := ioutil.ReadFile("/etc/apt/sources.list")
+	if err != nil {
+		log.Println(err)
+	}
+	contents = append(contents, string(src))
+	files, err := ioutil.ReadDir("/etc/apt/sources.list.d")
+	for _, n := range files {
+		srcd, err := ioutil.ReadFile("/etc/apt/sources.list.d/" + n.Name())
+		if err != nil {
+			log.Println(err)
+		}
+		contents = append(contents, string(srcd))
+	}
+	content := strings.Join(contents, "\n")
+	re := regexp.MustCompile(`(http\S+) ([a-z-]+) (.+)`)
+	out := re.FindAllStringSubmatch(content, 3)
+	for i := range out {
+		if len(out) > 0 && len(out[0]) > 2 {
+			var p shared.UPackage
+			p.URL = out[i][1]
+			p.Repo = out[i][2]
+			p.Extensions = out[i][3]
+			pack = append(pack, p)
+		}
+	}
+	return pack
+}
+
 func Allaptrepos() []shared.RPackage {
 	var array []string
 	out, err := exec.Command("dpkg", "-l").Output()

@@ -1,19 +1,36 @@
 {{define "allservers"}}
     {{range .PageInfo}}
         {{if .Outdated}}
-            <div class="card m-3 red" style="width: 10rem;">
-                <div class="card-body">
-                <h5 class="card-title">{{.Hostname}}</h5>
-                <a href="/outdated/{{.Hostname}}" class="btn btn-sm btn-danger shadow">Outdated Packages</a>
-                </div>
+        <div class="card m-3 red" style="width: 18rem;">
+            <div class="card-body">
+            <h5 class="card-title"><strong>{{.Hostname}}</strong>
+                <span class="badge bg-danger rounded-pill shadow">{{.Totalout}}</span>
+            </h5>
+            <p class="card-text">
+                <strong>OS:</strong> {{.OS.Name}}
+                <br>
+                <strong>Version:</strong> {{.OS.Version}}
+                <br>
+                <strong>Kernel:</strong> {{.Kernel}}
+                <br><br>
+                This server has one or more outdated packages.</p>
+            <a href="/outdated/{{.Hostname}}" class="btn btn-danger shadow">Outdated Packages</a>
             </div>
+        </div>
         {{else}}
-            <div class="card m-3 green" style="width: 10rem;">
-                <div class="card-body">
-                <h5 class="card-title">{{.Hostname}}</h5>
-                <a href="/outdated/{{.Hostname}}" class="btn btn-sm btn-success shadow">All Repos</a>
-                </div>
+        <div class="card m-3 green" style="width: 18rem;">
+            <div class="card-body">
+            <h5 class="card-title"><strong>{{.Hostname}}</strong>
+                <span class="badge bg-success rounded-pill shadow">{{.Totalout}}</span>
+            </h5>
+            <p class="card-text">
+                <strong>OS:</strong> {{.OS.Name}}
+                <br>
+                <strong>Version:</strong> {{.OS.Version}}
+                <br>
+                <strong>Kernel:</strong> {{.Kernel}}
             </div>
+        </div>
         {{end}}
     {{end}}
 {{end}}

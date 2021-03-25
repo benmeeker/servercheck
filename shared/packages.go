@@ -18,7 +18,9 @@ type Info struct {
 	Aptrepos      []RPackage               `json:"aptrepos"`
 	Newversions   map[string]OPackage      `json:"newversions"`
 	Outdated      bool                     `json:"outdated"`
+	Totalout      int                      `json:"totalout"`
 	Outdatedrepos map[string]Outdatedrepos `json:"outdatedrepos"`
+	URL           []UPackage               `json:"url"`
 }
 
 type PageData struct {
@@ -29,9 +31,9 @@ type PageData struct {
 }
 
 type OS struct {
-	OS   string   `json:"os"`
-	Type []string `json:"type"`
-	URL  string   `json:"url"`
+	OS   string            `json:"os"`
+	Type map[string]string `json:"type"`
+	URL  []string          `json:"url"`
 }
 
 type Newversions struct {
@@ -42,4 +44,10 @@ type Outdatedrepos struct {
 	Name       string `json:"name"`
 	Oldversion string `json:"oldversion"`
 	Newversion string `json:"newversion"`
+}
+
+type UPackage struct {
+	URL        string `json:"url"`
+	Repo       string `json:"repo"`
+	Extensions string `json:"extensions"`
 }
